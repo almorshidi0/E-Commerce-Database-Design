@@ -1,6 +1,6 @@
 ## ERD
 
-![[ERD.png]]
+![ERD](ERD.png)
 
 ## Schema
 
