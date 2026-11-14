@@ -32,7 +32,7 @@ CREATE TABLE Product (
     CategoryID INT,
     ProductName VARCHAR(50),
     ProductDescription TEXT,
-    Price DECIMAL(10,2),
+    Price DECIMAL(10,2) CHECK (Price >= 0),
     StockQuantity INT,
     
     PRIMARY KEY (ProductID),
@@ -43,7 +43,7 @@ CREATE TABLE Orders (
     OrderID AUTO_INCREMENT INT,
     CustomerID INT,
     OrderDate DATE,
-    TotalAmount DECIMAL(10,2),
+    TotalAmount DECIMAL(10,2) CHECK (TotalAmount >= 0),
     
     PRIMARY KEY (OrderID),
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
@@ -54,7 +54,7 @@ CREATE TABLE OrderDetails (
     OrderID INT,
     ProductID INT,
     Quantity INT,
-    UnitPrice DECIMAL(10,2),
+    UnitPrice DECIMAL(10,2)  CHECK (UnitPrice >= 0),
     
     PRIMARY KEY (OrderDetailID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
