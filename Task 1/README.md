@@ -9,46 +9,53 @@ CREATE DATABASE ECOMMERCE;
 USE ECOMMERCE;
 
 CREATE TABLE Customer (
-    CustomerID INT,
+	CustomerID AUTO_INCREMENT INT,
     FirstName VARCHAR(50) NOT NULL,
     LastName VARCHAR(50) NOT NULL,
     Email VARCHAR(250) NOT NULL,
     CustomerPassword VARCHAR(255) NOT NULL,
+    
     PRIMARY KEY (CustomerID)
 );
 
 CREATE TABLE Category (
-    CategoryID INT,
+    CategoryID AUTO_INCREMENT INT,
     CategoryName VARCHAR(50),
-    PRIMARY KEY (CategoryID)
+    ParentCategoryID INT,
+    
+    PRIMARY KEY (CategoryID),
+    FOREIGN KEY (ParentCategoryID) REFERENCES Category(CategoryID)
 );
 
 CREATE TABLE Product (
-    ProductID INT,
+    ProductID AUTO_INCREMENT INT,
     CategoryID INT,
     ProductName VARCHAR(50),
     ProductDescription TEXT,
     Price DECIMAL(10,2),
     StockQuantity INT,
+    
     PRIMARY KEY (ProductID),
     FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)
 );
 
 CREATE TABLE Orders (
-    OrderID INT,
+    OrderID AUTO_INCREMENT INT,
     CustomerID INT,
     OrderDate DATE,
     TotalAmount DECIMAL(10,2),
+    
     PRIMARY KEY (OrderID),
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
 
 CREATE TABLE OrderDetails (
-    OrderDetailID INT,
+    OrderDetailID AUTO_INCREMENT INT,
     OrderID INT,
     ProductID INT,
     Quantity INT,
     UnitPrice DECIMAL(10,2),
+    
     PRIMARY KEY (OrderDetailID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
@@ -57,11 +64,15 @@ CREATE TABLE OrderDetails (
 
 ## Reports
 
+-  Write an SQL query to generate a daily report of the total revenue for a specific date.
+
 ```sql
 SELECT OrderDate AS RevenueDate, SUM(TotalAmount) AS TotalRevenue
 FROM Orders
 GROUP BY OrderDate;
 ```
+
+- Write an SQL query to generate a monthly report of the top-selling products in a given month.
 
 ```sql
 SELECT p.ProductName, SUM(od.UnitPrice) AS TotalAmount
@@ -71,6 +82,8 @@ WHERE o.OrderDate BETWEEN '2023-08-01' AND '2023-08-31'
 GROUP BY p.ProductName
 ORDER BY TotalAmount DESC;
 ```
+
+-  Write a SQL query to retrieve a list of customers who have placed orders totaling more than $500 in the past month. Include customer names and their total order amounts.
 
 ```sql
 SELECT c.CustomerID, c.FirstName, c.LastName, SUM(o.TotalAmount) AS TotalOrders
